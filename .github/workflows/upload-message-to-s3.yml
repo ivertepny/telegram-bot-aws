@@ -1,4 +1,4 @@
-name: Upload Telegram message to S3
+name: Upload Telegram message
 
 on:
   push:
@@ -6,8 +6,6 @@ on:
       - main
     paths:
       - 'content/message.txt'
-      - '.github/workflows/upload-message-to-s3.yml'
-  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -18,15 +16,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: arn:aws:iam::016683085594:role/github-actions-s3-upload-role
           aws-region: eu-central-1
 
-      - name: Upload message.txt to S3
-        run: |
-          aws s3 cp content/message.txt s3://igor-telegram-bot-text/message.txt
+      - run: aws s3 cp content/message.txt s3://igor-telegram-bot-text/message.txt
