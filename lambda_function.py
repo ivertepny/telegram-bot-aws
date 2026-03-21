@@ -1,6 +1,7 @@
 import os
 import asyncio
 import boto3
+import re
 
 print("1. Lambda import started")
 
@@ -33,7 +34,8 @@ async def send_to_telegram(text):
 
     print("5. Connecting Telegram")
 
-    targets = [target.strip() for target in TG_TARGET.split(";") if target.strip()]
+    # Accept both ";" and "," as separators to avoid env formatting issues.
+    targets = [target.strip() for target in re.split(r"[;,]", TG_TARGET) if target.strip()]
     if not targets:
         raise ValueError("TG_TARGET does not contain any valid targets")
 
